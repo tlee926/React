@@ -20,9 +20,9 @@ import {
 import { Link } from "react-router-dom";
 import { Control, LocalForm, Errors } from "react-redux-form";
 
-const required = (val) => val && val.length;
-const maxLength = (len) => (val) => !val || val.length <= len;
-const minLength = (len) => (val) => val && val.length >= len;
+
+const maxLength = len => val => !val || (val.length <= len);
+const minLength = len => val => val && (val.length >= len);
 
 class CommentForm extends Component {
   constructor(props) {
@@ -49,10 +49,15 @@ class CommentForm extends Component {
   render() {
     return (
       <div>
-        <Button outline onClick={this.toggleModal}>
-          <i className="fa fa-pencil" /> Submit Comment
+        <Button
+          color="primary"
+          className="fa fa-pencil"
+          outline
+          onClick={this.toggleModal}
+        >
+          {" "}
+          Submit Comment
         </Button>
-
         <Modal isOpen={this.state.isModalOpen} toggle={this.toggleModal}>
           <ModalHeader toggle={this.toggleModal}>Submit Comment</ModalHeader>
           <ModalBody>
@@ -81,7 +86,6 @@ class CommentForm extends Component {
                   placeholder="Your Name"
                   className="form-control"
                   validators={{
-                    required,
                     minLength: minLength(2),
                     maxLength: maxLength(15),
                   }}
@@ -139,32 +143,25 @@ function RenderCampsite({ campsite }) {
 function RenderComments({ comments }) {
   if (comments) {
     return (
-      <>
-        <div className="col-md-5 m-1">
-          <h4>Comments</h4>
-          {comments.map((c) => {
-            return (
-              <div key={c.id}>
-                <p>
-                  {c.text}
-                  <br />
-                  <i>{c.author}</i> --{" "}
-                  {new Intl.DateTimeFormat("en-US", {
-                    year: "numeric",
-                    month: "short",
-                    day: "2-digit",
-                  }).format(new Date(Date.parse(c.date)))}
-                  >
-                </p>
-              </div>
-            );
-          })}
-          <CommentForm />
-        </div>
-      </>
+      <div className="col-md-5 m-1">
+        <h4>Comments</h4>
+        {comments.map((comments) => (
+          <div className="p-1" key={comments.id}>
+            {comments.text}
+            <br></br>
+            -- {comments.author},{" "}
+            {new Intl.DateTimeFormat("en-US", {
+              year: "numeric",
+              month: "short",
+              day: "2-digit",
+            }).format(new Date(Date.parse(comments.date)))}
+          </div>
+        ))}
+      </div>
     );
+  } else {
+    return <div></div>;
   }
-  return <div></div>;
 }
 
 function CampsiteInfo(props) {

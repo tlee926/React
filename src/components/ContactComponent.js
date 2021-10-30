@@ -5,7 +5,7 @@ import {
   Button,
   Label,
   Col,
-  Row,
+  Row
 } from "reactstrap";
 import { Link } from "react-router-dom";
 import { Control, LocalForm, Errors } from "react-redux-form";
